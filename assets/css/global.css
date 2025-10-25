@@ -1,0 +1,15 @@
+/* Global styles converted from Tailwind usage to plain CSS */
+:root{
+  --bg-color: #0b0b0f;
+  --text-muted: #9ca3af;
+}
+html,body,#__nuxt{ height:100%; }
+body{ margin:0; font-family: 'Century Gothic', system-ui, -apple-system, 'Segoe UI', Roboto; background:var(--bg-color); color:#fff }
+.container{ max-width:1100px; margin:0 auto; padding:12px 18px }
+a{ color:inherit }
+
+/* Utility */
+.text-muted{ color:var(--text-muted) }
+
+/* Ensure main spacing below fixed header */
+main{ margin-top:72px }

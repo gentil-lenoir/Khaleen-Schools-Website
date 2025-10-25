@@ -1,0 +1,12 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Khaleen Schools",
+  "url": "https://schools.khaleen.com",
+  "logo": "https://schools.khaleen.com/favicon.png",
+  "description": "Plateforme d'enregistrement, de digitalisation, d'automatisation des tâches scolaires et de gestion pour établissements scolaires. Inscrivez votre école et accédez à des outils modernes pour l'éducation.",
+  "sameAs": [
+    "https://wa.me/243978089552",
+    "https://twitter.com/khaleenschools"
+  ]
+}
