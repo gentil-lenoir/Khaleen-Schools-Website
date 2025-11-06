@@ -27,15 +27,19 @@
               <span>Découvrir</span>
               <i class="pi pi-play"></i>
             </a>
+            <a href="/about" class="btn-secondary">
+              <span>A-Propos</span>
+              <i class="pi pi-play"></i>
+            </a>
           </div>
           <div class="hero-stats animate-stats">
             <div class="stat-item">
-              <span class="stat-number">500+</span>
-              <span class="stat-label">Écoles</span>
+              <span class="stat-number">99%</span>
+              <span class="stat-label">Automatisation</span>
             </div>
             <div class="stat-item">
-              <span class="stat-number">50k+</span>
-              <span class="stat-label">Utilisateurs</span>
+              <span class="stat-number">100%</span>
+              <span class="stat-label">International</span>
             </div>
             <div class="stat-item">
               <span class="stat-number">99%</span>
@@ -86,6 +90,7 @@
       </div>
     </section>
 
+    <h1 style="text-align: center">Contactez-nous</h1>
     <section class="contacts">
       <div>
         <h3>Email</h3>
@@ -335,7 +340,7 @@ onMounted(() => {
   background: linear-gradient(135deg, var(--surface-900) 0%, var(--surface-800) 50%, var(--surface-900) 100%);
   position: relative;
   overflow: hidden;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   display: flex;
   align-items: center;
 }
@@ -1068,6 +1073,7 @@ details p {
   padding: 2rem;
   border-radius: 8px;
   font-family: 'Segoe UI', sans-serif;
+  /* margin-top: -5rem; */
 }
 
 .contacts > div {

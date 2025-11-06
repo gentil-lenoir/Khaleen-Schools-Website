@@ -148,7 +148,7 @@
               v-model="form.motto"
               rows="3"
               class="form-textarea"
-              placeholder="Ex: Excellence, Discipline, Réussite"
+              placeholder="Ex: Excellence - Discipline - Réussite"
             ></textarea>
           </div>
         </div>
@@ -251,15 +251,52 @@
               <label class="form-label">
                 Adresse email institutionnelle <span class="required">*</span>
               </label>
-              <input
-                v-model="form.email"
-                type="email"
-                class="form-input"
-                :class="{ 'error': errors.email }"
-                placeholder="ex: contact@ecole.edu"
-                @blur="validateField('email')"
-              />
-              <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
+                <input
+                  v-model="form.email"
+                  type="email"
+                  class="form-input"
+                  :class="{ 'error': errors.email }"
+                  placeholder="ex: contact@ecole.edu"
+                  @blur="validateField('email')"
+                />
+                <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
+
+                <!-- Email verification actions -->
+                <div class="email-actions" style="margin-top:0.75rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                  <button
+                    type="button"
+                    class="nav-button primary"
+                    @click="sendVerification"
+                    :disabled="sendLoading || !form.email"
+                    style="padding:0.5rem 1rem; font-size:0.95rem;"
+                  >
+                    {{ sendLoading ? 'Envoi...' : (codeSent ? 'Renvoyer le code' : 'Envoyer le code') }}
+                  </button>
+
+                  <span v-if="sendError" class="error-message" style="margin-left:0.5rem">{{ sendError }}</span>
+
+                  <span v-if="isEmailVerified" style="color:#10b981; font-weight:600;">✔️ Email vérifié</span>
+                </div>
+
+                <div v-if="codeSent && !isEmailVerified" style="margin-top:0.75rem; display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                  <input
+                    v-model="verificationCode"
+                    type="text"
+                    class="form-input"
+                    placeholder="Entrez le code (6 chiffres)"
+                    style="width:180px;"
+                  />
+                  <button
+                    type="button"
+                    class="nav-button primary"
+                    @click="verifyEmail"
+                    :disabled="verifyLoading"
+                    style="padding:0.5rem 1rem; font-size:0.95rem;"
+                  >
+                    {{ verifyLoading ? 'Vérification...' : 'Vérifier le code' }}
+                  </button>
+                  <span v-if="verifyError" class="error-message" style="margin-left:0.5rem">{{ verifyError }}</span>
+                </div>
             </div>
 
             <div class="form-group">
@@ -305,13 +342,13 @@
             </div>
 
             <div class="form-group">
-              <label class="form-label">Ville <span class="required">*</span></label>
+              <label class="form-label">Ville ou cité<span class="required">*</span></label>
               <input
                 v-model="form.city"
                 type="text"
                 class="form-input"
                 :class="{ 'error': errors.city }"
-                placeholder="Ex: Kinshasa"
+                placeholder="Ex: Kinshasa ville"
                 @blur="validateField('city')"
               />
               <span v-if="errors.city" class="error-message">{{ errors.city }}</span>
@@ -423,11 +460,11 @@
             </label>
             <select v-model="form.annualBudget" class="form-select">
               <option value="">Sélectionnez une fourchette</option>
-              <option value="0-10000">0 - 10,000 USD</option>
-              <option value="10000-50000">10,000 - 50,000 USD</option>
-              <option value="50000-100000">50,000 - 100,000 USD</option>
-              <option value="100000-500000">100,000 - 500,000 USD</option>
-              <option value="500000+">500,000 USD et plus</option>
+              <option value="0-1500">0 - 1,500 USD</option>
+              <option value="1500-5000">1,500 - 5,000 USD</option>
+              <option value="5000-15000">5,000 - 15,000 USD</option>
+              <option value="15000-50000">15,000 - 50,000 USD</option>
+              <option value="50000+">50,000 USD et plus</option>
             </select>
           </div>
 
@@ -436,7 +473,7 @@
             <select v-model="form.fundingSource" class="form-select">
               <option value="">Sélectionnez</option>
               <option value="government">Gouvernement</option>
-              <option value="tuition">Frais de scolarité</option>
+              <option value="students">Frais de scolarité</option>
               <option value="donations">Dons</option>
               <option value="mixed">Mixte</option>
               <option value="other">Autre</option>
@@ -469,12 +506,12 @@
               />
             </div>
             <div class="form-group">
-              <label class="form-label">Twitter/X</label>
+              <label class="form-label">youtube</label>
               <input
-                v-model="form.socials.twitter"
+                v-model="form.socials.youtube"
                 type="url"
                 class="form-input"
-                placeholder="https://twitter.com/ecole"
+                placeholder="https://youtube.com/ecole"
               />
             </div>
             <div class="form-group">
@@ -503,7 +540,7 @@
               v-model="form.socials.other"
               rows="2"
               class="form-textarea"
-              placeholder="YouTube, TikTok, etc."
+              placeholder="Twitter, TikTok, etc."
             ></textarea>
           </div>
         </div>
@@ -582,6 +619,7 @@
           </div>
         </div>
 
+
         <!-- Navigation des étapes -->
         <div class="form-navigation">
           <button
@@ -620,6 +658,9 @@
 
 <script setup>
 import { ref, computed, reactive, watch } from 'vue'
+import { useRouter } from '#app'
+
+const router = useRouter();
 
 const currentStep = ref(0)
 const totalSteps = 6
@@ -633,17 +674,17 @@ const steps = [
   { number: 3, label: 'Coordonnées' },
   { number: 4, label: 'Effectifs' },
   { number: 5, label: 'Réseaux sociaux' },
-  { number: 6, label: 'Sécurité' }
+  { number: 6, label: 'Sécurité' },
 ]
 
 const pricingPlans = [
   {
     id: 'starter',
-    name: 'Starter',
+    name: "Starter - Plan d'Essais ",
     price: 0,
     maxStudents: 200,
-    features: ['Fonctionnalités de base', 'Support communautaire'],
-    support: 'Support de base',
+    features: ["1 mois d'essais gratuit",'Fonctionnalités de base'],
+    support: 'Pas de support dédié',
     recommended: false
   },
   {
@@ -704,7 +745,7 @@ const form = reactive({
   website: '',
   socials: {
     facebook: '',
-    twitter: '',
+    youtube: '',
     linkedin: '',
     instagram: '',
     other: ''
@@ -716,6 +757,16 @@ const form = reactive({
   termsAccepted: false,
   newsletter: false
 })
+
+// Email verification state
+const emailToken = ref('')
+const codeSent = ref(false)
+const verificationCode = ref('')
+const isEmailVerified = ref(false)
+const sendLoading = ref(false)
+const verifyLoading = ref(false)
+const sendError = ref('')
+const verifyError = ref('')
 
 const errors = reactive({
   selectedPlan: '',
@@ -783,15 +834,14 @@ const isStepValid = computed(() => {
     1: () => !errors.schoolName && form.schoolName,
     2: () => !errors.educationLevel && !errors.schoolType && form.educationLevel && form.schoolType,
     3: () => !errors.email && !errors.phone && !errors.address && !errors.city && !errors.country && 
-          form.email && form.phone && form.address && form.city && form.country,
+          form.email && form.phone && form.address && form.city && form.country && isEmailVerified.value,
     4: () => !errors.studentCount && !errors.teacherCount && form.studentCount && form.teacherCount,
     5: () => true, // Réseaux sociaux optionnels
     6: () => !errors.password && !errors.confirmPassword && !errors.termsAccepted && 
-          form.password && form.confirmPassword && form.termsAccepted
+           form.password && form.confirmPassword && form.termsAccepted
   }
   return stepValidations[currentStep.value] ? stepValidations[currentStep.value]() : true
 })
-
 const isFormValid = computed(() => {
   return Object.keys(validations).every(field => !validations[field](form[field]))
 })
@@ -838,6 +888,87 @@ const selectPlan = (plan) => {
   validateField('selectedPlan')
 }
 
+// Envoi du code de vérification par email
+const sendVerification = async () => {
+  validateField('email')
+  if (errors.email) {
+    alert('Veuillez fournir une adresse email valide avant d\'envoyer le code')
+    return
+  }
+
+  sendLoading.value = true
+  sendError.value = ''
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/email/send-verification', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.email })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      sendError.value = data.message || 'Erreur lors de l\'envoi du code'
+      alert('Erreur: ' + sendError.value)
+      return
+    }
+
+    emailToken.value = data.token || ''
+    codeSent.value = true
+    isEmailVerified.value = false
+    alert('Code de vérification envoyé à ' + form.email)
+
+  } catch (err) {
+    console.error('Erreur en envoyant le code:', err)
+    sendError.value = 'Erreur de communication avec le serveur'
+    alert(sendError.value)
+  } finally {
+    sendLoading.value = false
+  }
+};
+
+// Vérifier le code reçu
+const verifyEmail = async () => {
+  if (!codeSent.value) {
+    alert('Veuillez d\'abord demander un code de vérification')
+    return
+  }
+
+  if (!verificationCode.value || verificationCode.value.toString().length !== 6) {
+    verifyError.value = 'Veuillez saisir le code à 6 chiffres reçu par email'
+    return
+  }
+
+  verifyLoading.value = true
+  verifyError.value = ''
+
+  try {
+    const res = await fetch('http://127.0.0.1:8000/api/email/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: form.email, code: verificationCode.value, token: emailToken.value })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      verifyError.value = data.message || 'Échec de la vérification'
+      alert('Erreur: ' + verifyError.value)
+      return
+    }
+
+    isEmailVerified.value = true
+    alert('Adresse email vérifiée ✅')
+  } catch (err) {
+    console.error('Erreur lors de la vérification:', err)
+    verifyError.value = 'Erreur de communication avec le serveur'
+    alert(verifyError.value)
+  } finally {
+    verifyLoading.value = false
+  }
+}
+
 // Gestion du logo
 const logoInput = ref(null)
 
@@ -878,7 +1009,7 @@ const removeLogo = () => {
 // Téléchargement des données
 const downloadData = () => {
   const data = {
-    plan: selectedPlan.value,
+    plan: selectedPlan.value.id,
     schoolInfo: {
       name: form.schoolName,
       acronym: form.acronym,
@@ -907,6 +1038,7 @@ const downloadData = () => {
       budget: form.annualBudget,
       funding: form.fundingSource
     },
+    password: form.password,
     socials: form.socials,
     timestamp: new Date().toISOString()
   }
@@ -928,6 +1060,7 @@ const downloadData = () => {
 }
 
 // Soumission
+// Soumission - VERSION CORRIGÉE
 const handleSubmit = async () => {
   if (!isFormValid.value) {
     alert('Veuillez corriger les erreurs avant de soumettre')
@@ -935,39 +1068,131 @@ const handleSubmit = async () => {
   }
 
   isLoading.value = true
-  
+
   try {
-    // Simuler l'envoi des données
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log('Données soumises:', form)
-    
-    // Télécharger les données
-    downloadData()
-    
-    alert('Établissement enregistré avec succès! Vos données ont été sauvegardées.')
-    
-    // Redirection ou reset du formulaire
-    // await navigateTo('/dashboard')
-    
+    if (!selectedPlan.value) {
+      alert('Aucun plan sélectionné — veuillez revenir à la sélection de plan.')
+      isLoading.value = false
+      return
+    }
+
+    let logoBase64 = null;
+    if (form.logo) {
+      // Convertir le fichier en base64
+      logoBase64 = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(form.logo);
+      });
+    }
+
+    const payload = {
+      plan: selectedPlan.value.id,
+      schoolInfo: {
+        name: form.schoolName,
+        acronym: form.acronym,
+        motto: form.motto,
+        educationLevel: form.educationLevel,
+        schoolType: form.schoolType,
+        religion: form.religion,
+        foundingYear: form.foundingYear,
+        logo: logoBase64
+      },
+      contact: {
+        email: form.email,
+        phone: form.phone,
+        address: form.address,
+        poBox: form.poBox,
+        city: form.city,
+        province: form.province,
+        country: form.country
+      },
+      staff: {
+        students: form.studentCount,
+        teachers: form.teacherCount,
+        admin: form.adminStaffCount,
+        support: form.supportStaffCount
+      },
+      finances: {
+        budget: form.annualBudget,
+        funding: form.fundingSource
+      },
+      socials: form.socials,
+      timestamp: new Date().toISOString(),
+      password: form.password,
+      
+    }
+
+    const queryString = encodeURIComponent(JSON.stringify(payload))
+    const url = `http://127.0.0.1:8000/api/check_registration?json=${queryString}`
+
+    const response = await fetch(url, {
+      method: 'GET'
+    })
+
+    const data = await response.json()
+    console.log('Réponse complète du serveur:', data)
+
+    // ✅ CORRECTION : Vérifiez le message de succès
+    if (response.ok && data.message && data.message.includes('succès')) {
+      alert('✅ ' + data.message)
+      console.log('Clés générées:', data.keys)
+      
+      // Redirection vers la page welcome
+      navigateToWelcome(data)
+
+      downloadData();
+      
+    } else {
+      // Gestion des erreurs
+      const errorMessage = data.message || 'Une erreur est survenue'
+      alert('⚠️ ' + errorMessage)
+      console.error('Erreur détaillée:', data.errors || data)
+    }
+
   } catch (error) {
-    console.error('Erreur lors de l\'enregistrement:', error)
-    alert('Une erreur est survenue. Veuillez réessayer.')
+    console.error('Erreur lors de la soumission:', error)
+    
+    if (error.name === 'TypeError') {
+      alert('❌ Erreur de réseau - Impossible de contacter le serveur')
+    } else {
+      alert('❌ Erreur: ' + error.message)
+    }
+    
   } finally {
     isLoading.value = false
   }
 }
 
+// Fonction de redirection
+const navigateToWelcome = (responseData) => {
+  // Stockez les données si nécessaire
+  localStorage.setItem('registrationData', JSON.stringify(responseData))
+  
+  // Redirection vers la page welcome
+  // window.location.href = '/welcome'
+  // // Ou si vous utilisez Vue Router:
+  router.push('/welcome')
+}
 // Watch pour la validation en temps réel du nombre d'élèves
 watch(() => form.studentCount, () => {
   validateField('studentCount')
 })
+
+// Reset verification state when the email field changes
+watch(() => form.email, (newVal, oldVal) => {
+  if (!newVal || newVal !== oldVal) {
+    codeSent.value = false
+    emailToken.value = ''
+    verificationCode.value = ''
+    isEmailVerified.value = false
+    sendError.value = ''
+    verifyError.value = ''
+  }
+})
 </script>
 
 <style scoped>
-/* Styles existants... */
-
-/* Styles pour les plans */
 .plans-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -1095,6 +1320,57 @@ watch(() => form.studentCount, () => {
   border: 1px solid #bbf7d0;
 }
 
+/* Styles pour la section de paiement */
+.section-subtitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+.plan-upgrade-section {
+  background: #1e293b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.upgrade-message {
+  color: #94a3b8;
+  margin-bottom: 1.5rem;
+}
+
+.upgrade-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.payment-section {
+  background: #1e293b;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.payment-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #3b82f6;
+  margin-bottom: 1.5rem;
+}
+
+.payment-note {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #0f172a;
+  border-radius: 0.5rem;
+  color: #94a3b8;
+}
+
+.payment-note p {
+  margin: 0.5rem 0;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .plans-grid {
@@ -1105,6 +1381,10 @@ watch(() => form.studentCount, () => {
     flex-direction: column;
     gap: 0.5rem;
     font-size: 0.8rem;
+  }
+
+  .upgrade-options {
+    flex-direction: column;
   }
 }
 

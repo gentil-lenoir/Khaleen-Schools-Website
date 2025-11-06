@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Analytics/>
     <NuxtLayout />
   </div>
 </template>
@@ -7,6 +8,7 @@
 
 <script setup>
 import { useHead } from '#app'
+import { Analytics } from '@vercel/analytics/nuxt'
 
 useHead({
   title: 'Khaleen Schools - Plateforme de modernisation et de digitalisation de Gestion Scolaire Nouvelle Génération',

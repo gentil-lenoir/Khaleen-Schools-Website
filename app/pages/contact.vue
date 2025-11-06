@@ -274,7 +274,7 @@ const validations = {
     return ''
   },
   subject: (v) => !v ? 'Le sujet est requis' : v.length < 5 ? 'Le sujet doit être plus descriptif' : '',
-  message: (v) => !v ? 'Le message est requis' : v.length < 10 ? 'Le message doit contenir au moins 10 caractères' : v.length > 500 ? 'Le message ne peut pas dépasser 500 caractères' : ''
+  message: (v) => !v ? 'Le message est requis' : v.length < 10 ? 'Le message doit contenir au moins 10 caractères' : v.length > 5000 ? 'Le message ne peut pas dépasser 5000 caractères' : ''
 }
 
 const validateField = (field) => {
@@ -295,17 +295,32 @@ const handleSubmit = async () => {
   if (!validateAll()) return
 
   isSending.value = true
+
   try {
-    // Simuler envoi
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    console.log('Contact form sent:', { ...form })
+    const response = await fetch('http://127.0.0.1:8000/api/contact-us', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(form) // Assure-toi que `form` contient bien les données
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      const message = errorData.message || 'Les données envoyées sont nulles'
+      throw new Error(message)
+    }
+
+    const result = await response.json()
+    console.log('Contact form sent:', result)
+
     success.value = true
     resetForm(false)
+
   } catch (err) {
-    console.error(err)
-    // Ici vous pourriez utiliser un toast ou une notification
-    alert('Erreur lors de l\'envoi, réessayez plus tard.')
+    console.error('Erreur lors de la soumission:', err)
+    alert('❌ ' + err.message)
   } finally {
     isSending.value = false
   }
@@ -544,7 +559,7 @@ const resetForm = (clearSuccess = true) => {
 
 .form-input,
 .form-textarea {
-  width: 100%;
+  width: 90%;
   padding: 1rem 1rem 1rem 3rem;
   background: rgba(15, 23, 42, 0.8);
   border: 2px solid rgba(255, 255, 255, 0.1);

@@ -29,6 +29,7 @@
           <li><a href="/support">Support</a></li>
           <li><a href="/register">S'inscrire</a></li>
           <li><a href="/contact">Contactez-nous</a></li>
+          <li><a href="/about">Á-Propos</a></li>
           <!-- mobile auth links removed -->
         </ul>
       </nav>
