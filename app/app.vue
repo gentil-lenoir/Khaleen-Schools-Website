@@ -4,8 +4,7 @@
   </div>
 </template>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1907809566957486"
-     crossorigin="anonymous"></script>
+
 <script setup>
 import { useHead } from '#app'
 
