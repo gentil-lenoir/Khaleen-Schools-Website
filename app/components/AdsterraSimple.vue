@@ -1,29 +1,6 @@
 <!-- AdsterraDirect.vue - Version optimisée avec multiples emplacements -->
 <template>
   <div>
-    <!-- Bannière 300x250 TOP -->
-    <div class="adsterra-banner" style="margin: 2rem 0; text-align: center;">
-      <script type="text/javascript">
-        atOptions = {
-          'key' : 'b216f02fad36e6d4eb95eda8c8591d36',
-          'format' : 'iframe',
-          'height' : 250,
-          'width' : 300,
-          'params' : {}
-        };
-      </script>
-      <script type="text/javascript" src="//www.highperformanceformat.com/b216f02fad36e6d4eb95eda8c8591d36/invoke.js"></script>
-    </div>
-
-    <!-- Native Banner TOP -->
-    <div class="adsterra-native" style="margin: 2rem 0; text-align: center;">
-      <script 
-        async 
-        data-cfasync="false" 
-        src="//pl28003514.effectivegatecpm.com/659cc23355304b9d302d2283f845aa9b/invoke.js"
-      ></script>
-      <div id="container-659cc23355304b9d302d2283f845aa9b"></div>
-    </div>
 
     <!-- Bannière 468x60 MIDDLE -->
     <div class="adsterra-banner" style="margin: 3rem 0; text-align: center;">
