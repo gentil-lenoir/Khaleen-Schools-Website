@@ -4,6 +4,7 @@
     <AdsterraSimple />
     <main class="main">
       <NuxtPage />
+      <AdsterraSimple />
     </main>
     <AdsterraSimple />
     <Footer />
