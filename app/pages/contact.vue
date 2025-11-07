@@ -180,7 +180,7 @@
               <button @click="success = false" class="close-success">×</button>
             </div>
           </transition>
-        </form>
+        </form><AdsterraSimple />
 
         <!-- Sidebar de contact -->
         <aside class="contact-aside animate-aside">
@@ -220,7 +220,7 @@
                   </a>
                 </p>
               </div>
-            </div>
+            </div><AdsterraSimple />
 
             <div class="contact-item">
               <div class="contact-icon">🕒</div>

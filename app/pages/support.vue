@@ -10,7 +10,7 @@
         <div class="orb orb-2"></div>
         <div class="orb orb-3"></div>
       </div>
-    </div>
+    </div><AdsterraSimple />
 
     <div class="container">
       <!-- En-tête avec animation -->
@@ -22,7 +22,7 @@
         </p>
         <div class="header-decoration"></div>
       </div>
-
+<AdsterraSimple />
       <!-- Section FAQ -->
       <section class="faq-section animate-section" style="animation-delay: 0.1s">
         <div class="section-header">
@@ -50,7 +50,7 @@
             </transition>
           </div>
         </div>
-      </section>
+      </section><AdsterraSimple />
 
       <!-- Formulaire de contact -->
       <section class="contact-section animate-section" style="animation-delay: 0.3s">
@@ -158,7 +158,7 @@
                 {{ form.message.length }}/500
               </div>
             </div>
-          </div>
+          </div><AdsterraSimple />
 
           <div class="form-actions">
             <button 
@@ -188,7 +188,7 @@
             </div>
           </transition>
         </form>
-      </section>
+      </section><AdsterraSimple />
 
       <!-- Infos de contact -->
       <aside class="support-info animate-section" style="animation-delay: 0.5s">

@@ -3,7 +3,7 @@
     <div class="legal-header">
       <h1>Conditions Générales d'Utilisation</h1>
       <p>Dernière mise à jour : {{ currentDate }}</p>
-    </div>
+    </div><AdsterraSimple />
     <div class="legal-content">
       <div class="legal-section">
         <h2>1. Acceptation des conditions</h2>
@@ -24,7 +24,7 @@
       <div class="legal-section">
         <h2>5. Limitations de responsabilité</h2>
         <p>Khaleen ne peut être tenu responsable des interruptions de service ou des pertes de données.</p>
-      </div>
+      </div><AdsterraSimple />
       <div class="legal-section">
         <h2>6. Modifications des conditions</h2>
         <p>Nous nous réservons le droit de modifier ces conditions à tout moment.</p>

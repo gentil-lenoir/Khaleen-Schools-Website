@@ -30,7 +30,7 @@
       
       <p class="welcome-subtitle">
         Votre établissement <strong>{{ schoolName }}</strong> a été créé avec succès.
-        Vous pouvez maintenant commencer à gérer votre école en toute simplicité.
+        Vou<AdsterraSimple />s pouvez maintenant commencer à gérer votre école en toute simplicité.
       </p>
 
       <div class="keys-info" v-if="keys">
@@ -43,7 +43,7 @@
           <code class="key-value secret">{{ keys.secret_key }}</code>
           <small class="warning">⚠️ Gardez cette clé précieusement !</small>
         </div>
-      </div>
+      </div><AdsterraSimple />
 
       <!-- Bouton pour continuer vers la page de téléchargement -->
       <div class="download-section">
@@ -65,7 +65,7 @@
         <p class="download-info">
           Accédez à votre espace de gestion pour configurer votre établissement
         </p>
-      </div>
+      </div><AdsterraSimple />
 
       <div class="next-steps">
         <h3>Prochaines étapes recommandées :</h3>
@@ -76,7 +76,7 @@
           <li>⚙️ Personnaliser les paramètres</li>
           <li>📊 Consulter les statistiques</li>
         </ul>
-      </div>
+      </div><AdsterraSimple />
 
       <div class="support-info">
         <p>🛟 <strong>Besoin d'aide ?</strong> Contactez notre support : 

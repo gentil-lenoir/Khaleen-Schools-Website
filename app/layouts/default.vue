@@ -1,9 +1,11 @@
 <template>
   <div>
     <Header />
+    <AdsterraSimple />
     <main class="main">
       <NuxtPage />
     </main>
+    <AdsterraSimple />
     <Footer />
   </div>
 </template>

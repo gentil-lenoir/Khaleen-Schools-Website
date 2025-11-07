@@ -8,7 +8,7 @@
       <div class="legal-section">
         <h2>1. Données collectées</h2>
         <p>Nous collectons les données nécessaires au fonctionnement de votre compte et à l'amélioration de nos services.</p>
-      </div>
+      </div><AdsterraSimple />
       <div class="legal-section">
         <h2>2. Utilisation des données</h2>
         <p>Vos données sont utilisées pour :</p>
@@ -32,7 +32,7 @@
       </div>
       <div class="legal-contact">
         <h3>Contact</h3>
-        <p>
+        <p><AdsterraSimple />
           Pour toute question relative à la confidentialité, contactez-nous à
           <a href="mailto:khaleen.sites@outlook.com">khaleen.sites@outlook.com</a>
         </p>

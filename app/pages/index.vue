@@ -18,6 +18,7 @@
             Une nouvelle génération, une nouvelle technologie, <br>
             Digitalisez votre école sécondaire ou primaire, automatisez des tâches, et recoltez des devoirs et travaux enligne, trouvez un cloud securisé et modérez votre istitution
           </p>
+          <AdsterraSimple />
           <div class="hero-actions animate-actions">
             <a href="/register" class="button">
               <span>Essai Gratuit</span>
@@ -47,6 +48,7 @@
             </div>
           </div>
         </div>
+        <AdsterraSimple />
         <div class="hero-visual">
           <div class="dashboard-preview">
             <div class="main-dashboard animate-dashboard">
@@ -90,6 +92,7 @@
       </div>
     </section>
 
+    <AdsterraSimple />
     <h1 style="text-align: center">Contactez-nous</h1>
     <section class="contacts">
       <div>
@@ -108,6 +111,7 @@
         <p class="contact-note">Appelez-nous ou ecrivez-nous des SMS</p>
       </div>
     </section>
+    <AdsterraSimple />
 
     <!-- Features Section -->
     <section class="features">
@@ -148,6 +152,7 @@
           <h2 class="section-title">Plans adaptés à chaque établissement</h2>
           <p class="block-description">Choisissez un plan flexible selon la taille et les besoins de votre école.</p>
         </div>
+        <AdsterraSimple />
 <!-- SECTION CORRIGÉE -->
 <div class="pricing-grid">
   <div class="pricing-card" v-for="(plan, index) in pricingPlans" :key="index" 
@@ -190,6 +195,7 @@
         </div>
       </div>
     </section>
+    <AdsterraSimple />
 
     <!-- CTA Section -->
     <section class="block cta-block">
