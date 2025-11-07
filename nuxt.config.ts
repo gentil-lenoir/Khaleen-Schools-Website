@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   plugins: [
     '~/plugins/adsterra.client.js',
-    '~/plugins/adsterra.js'
+    // '~/plugins/adsterra.js'
   ],
   
 })
