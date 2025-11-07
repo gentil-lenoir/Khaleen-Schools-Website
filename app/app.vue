@@ -3,9 +3,8 @@
     <Analytics/>
     <NuxtLayout />
     <ClientOnly>
-      <AdsterraAd type="banner" container-id="adsterra-global-bottom" />
-    </ClientOnly>
-  </div>
+      <div id="adsterra-native"></div>
+    </ClientOnly>  </div>
 </template>
 
 

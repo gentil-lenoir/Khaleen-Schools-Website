@@ -1,61 +1,55 @@
-// plugins/adsterra.client.js
+// plugins/adsterra.client.js - VERSION FINALE
 export default defineNuxtPlugin((nuxtApp) => {
-  // Configuration Adsterra
+  // Vérifier si déjà initialisé
+  if (nuxtApp.$adsterra) return
+  
   const adsterraConfig = {
-    bannerKey: 'TA_CLE_BANNER',
-    popunderKey: 'TA_CLE_POPUNDER', 
-    headerKey: 'TA_CLE_HEADER'
+    nativeBanner: '659cc23355304b9d302d2283f845aa9b',
+    socialBar: '22cd2ccb8a05c1515a242d2a03acc0a7'
   }
 
-  // Fonction pour charger les bannières
-  const loadAdsterraBanner = (key, width = 300, height = 250, containerId = 'adsterra-banner') => {
-    if (typeof window === 'undefined') return // Only client-side
+  const loadNativeBanner = (containerId = 'adsterra-native') => {
+    if (typeof window === 'undefined') return
     
     const container = document.getElementById(containerId)
     if (!container) return
 
+    // Créer le container si inexistant
+    if (!container.querySelector('#container-' + adsterraConfig.nativeBanner)) {
+      const nativeContainer = document.createElement('div')
+      nativeContainer.id = 'container-' + adsterraConfig.nativeBanner
+      container.appendChild(nativeContainer)
+    }
+
+    // Charger le script
     const script = document.createElement('script')
-    script.innerHTML = `
-      atOptions = {
-        'key': '${key}',
-        'format': 'iframe',
-        'height': ${height},
-        'width': ${width},
-        'params': {}
-      };
-      document.write('<scr' + 'ipt type="text/javascript" src="https://www.profitabledisplaynetwork.com/${key}/invoke.js"></scr' + 'ipt>');
-    `
+    script.async = true
+    script.setAttribute('data-cfasync', 'false')
+    script.src = `//pl28003514.effectivegatecpm.com/${adsterraConfig.nativeBanner}/invoke.js`
+    
     container.appendChild(script)
   }
 
-  // Fonction pour popunder
-  const loadAdsterraPopunder = (key) => {
+  const loadSocialBar = () => {
     if (typeof window === 'undefined') return
-    
-    // Éviter de montrer le popunder trop souvent
-    if (sessionStorage.getItem('adsterra_popunder_shown')) return
 
     const script = document.createElement('script')
-    script.src = `https://www.profitabledisplaynetwork.com/${key}/invoke.js`
-    script.async = true
+    script.type = 'text/javascript'
+    script.src = `//pl28003490.effectivegatecpm.com/22/cd/2c/${adsterraConfig.socialBar}.js`
+    
     document.head.appendChild(script)
-
-    sessionStorage.setItem('adsterra_popunder_shown', 'true')
   }
 
-  // Exposer les fonctions globalement
-  return {
-    provide: {
-      adsterra: {
-        loadBanner: (containerId, key = adsterraConfig.bannerKey) => 
-          loadAdsterraBanner(key, 300, 250, containerId),
-        
-        loadHeader: (containerId, key = adsterraConfig.headerKey) => 
-          loadAdsterraBanner(key, 728, 90, containerId),
-        
-        loadPopunder: (key = adsterraConfig.popunderKey) => 
-          loadAdsterraPopunder(key)
-      }
-    }
-  }
+  nuxtApp.provide('adsterra', {
+    loadNativeBanner,
+    loadSocialBar
+  })
+
+  // Charger automatiquement après le rendu
+  nuxtApp.hook('app:mounted', () => {
+    setTimeout(() => {
+      loadNativeBanner()
+      loadSocialBar()
+    }, 2000)
+  })
 })
